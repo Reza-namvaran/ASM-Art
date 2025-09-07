@@ -1,0 +1,24 @@
+# DOSBox config files
+*.conf
+
+# Compiled binaries
+*.exe
+*.com
+*.obj
+*.o
+*.bin
+
+# Assembly intermediate files
+*.lst
+*.map
+*.sym
+
+# Temporary / backup files
+*.bak
+*.tmp
+*~
+*.swp
+
+# System files
+.DS_Store
+Thumbs.db
