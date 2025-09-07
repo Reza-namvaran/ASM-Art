@@ -16,11 +16,13 @@ start:
     mov cx, SCREEN_WIDTH/2
     mov dx, SCREEN_HEIGHT/2
 
+    ; Start in move mode
+    xor si, si          ; si = 0
+
 main_loop:
     ; Wait for key press
     mov ah, 0
-    int 0x16            ; AL = ASCII, AH = scan code
-
+    int 0x16           ; AL = ASCII, AH = scan code
 
     cmp ah, KEY_UP
     je move_up
@@ -30,6 +32,8 @@ main_loop:
     je move_left
     cmp ah, KEY_RIGHT
     je move_right
+    cmp ah, KEY_SPACE
+    je toggle_mode
     cmp ah, KEY_ESC
     je quit
 
@@ -39,28 +43,41 @@ move_up:
     cmp dx, 0
     jz main_loop
     dec dx
-    jmp draw_cursor
+    jmp after_move
 
 move_down:
     cmp dx, SCREEN_HEIGHT-1
     jz main_loop
     inc dx
-    jmp draw_cursor
+    jmp after_move
 
 move_left:
     cmp cx, 0
     jz main_loop
     dec cx
-    jmp draw_cursor
+    jmp after_move
 
 move_right:
     cmp cx, SCREEN_WIDTH-1
     jz main_loop
     inc cx
-    jmp draw_cursor
+    jmp after_move
+
+after_move:
+    cmp si, 0
+    je draw_cursor       ; if move mode, draw cursor
+    jmp paint_mode       ; if paint mode, draw permanent pixel
+
+toggle_mode:
+    xor si, 1            ; flip 0 <--> 1
+    jmp main_loop
 
 draw_cursor:
     PLOT_PIXEL cx, dx, COLOR_WHITE
+    jmp main_loop
+
+paint_mode:
+    PLOT_PIXEL cx, dx, COLOR_RED
     jmp main_loop
 
 quit:
