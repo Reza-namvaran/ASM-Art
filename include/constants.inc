@@ -14,3 +14,4 @@ KEY_DOWN        equ 0x50
 KEY_LEFT        equ 0x4B
 KEY_RIGHT       equ 0x4D
 KEY_ESC         equ 0x01
+KEY_SPACE       equ 0x39
